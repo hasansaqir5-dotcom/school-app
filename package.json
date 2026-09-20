@@ -15,15 +15,15 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.13",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.468.0",
     "next": "14.2.20",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "recharts": "^2.15.0"
   },
   "devDependencies": {
