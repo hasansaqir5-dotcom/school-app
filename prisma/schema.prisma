@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  role         String
+  name         String
+  nationalCode String   @unique
+  password     String
+  createdAt    DateTime @default(now())
+}
+
+model Class {
+  id           String   @id @default(cuid())
+  name         String
+  grade        String
+  schoolName   String
+  academicYear String
+  teacherId    String
+  teacher      User     @relation(fields: [teacherId], references: [id])
+  students     Student[]
+  subjects     Subject[]
+  createdAt    DateTime @default(now())
+}
+
+model Student {
+  id           String   @id @default(cuid())
+  firstName    String
+  lastName     String
+  fatherName   String
+  nationalCode String   @unique
+  classId      String
+  class        Class    @relation(fields: [classId], references: [id])
+  evaluations  Evaluation[]
+  attendances  Attendance[]
+  createdAt    DateTime @default(now())
+}
+
+model Subject {
+  id           String   @id @default(cuid())
+  name         String
+  classId      String
+  class        Class    @relation(fields: [classId], references: [id])
+  evaluations  Evaluation[]
+}
+
+model Evaluation {
+  id            String   @id @default(cuid())
+  studentId     String
+  subjectId     String
+  month         String
+  activityScore Int
+  examScore     Int
+  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject       Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+
+  @@unique([studentId, subjectId, month])
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  studentId String
+  date      String
+  dayOfWeek String
+  status    String
+  reason    String?
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model MotivationalMessage {
+  id   String @id @default(cuid())
+  type String
+  text String
+}
