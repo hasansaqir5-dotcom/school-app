@@ -1,0 +1,20 @@
+{
+  "name": "سامانه ارزشیابی توصیفی",
+  "short_name": "ارزشیابی",
+  "description": "اپلیکیشن ارزشیابی توصیفی ابتدایی",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e7490",
+  "theme_color": "#0e7490",
+  "dir": "rtl",
+  "lang": "fa",
+  "icons": [
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
