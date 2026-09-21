@@ -9,8 +9,9 @@ import ClassEditor from '@/components/teacher/ClassEditor';
 import StudentManager from '@/components/teacher/StudentManager';
 import EvaluationEditor from '@/components/teacher/EvaluationEditor';
 import AttendanceManager from '@/components/teacher/AttendanceManager';
+import Report from '@/components/parent/Report';
 
-type View = 'class' | 'students' | 'evaluation' | 'attendance';
+type View = 'class' | 'students' | 'evaluation' | 'attendance' | 'report';
 
 type Student = {
   id: string;
@@ -124,6 +125,15 @@ export default function TeacherPage() {
             setData={setAtts}
             ready={Boolean(info.schoolName)}
             say={setNotice}
+          />
+        )}
+        {view === 'report' && (
+          <Report
+            students={students}
+            allStudents={students}
+            evaluations={evals}
+            attendances={atts}
+            parentView={false}
           />
         )}
       </div>
