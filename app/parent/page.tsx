@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api';
 import Header from '@/components/Header';
 import Report from '@/components/parent/Report';
 
@@ -59,7 +60,7 @@ export default function ParentPage() {
 
   async function fetchReport(studentId: string) {
     try {
-      const res = await fetch(`/api/reports?studentId=${studentId}`);
+      const res = await apiFetch(`/api/reports?studentId=${studentId}`);
       const data = await res.json();
       if (data.class) setInfo(data.class);
       if (data.evaluations) {

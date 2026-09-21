@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api';
 import Header from '@/components/Header';
 import Nav from '@/components/Nav';
 import ClassEditor from '@/components/teacher/ClassEditor';
@@ -61,7 +62,7 @@ export default function TeacherPage() {
 
   async function fetchStudents() {
     try {
-      const res = await fetch('/api/students');
+      const res = await apiFetch('/api/students');
       const data = await res.json();
       setStudents(data);
     } catch (err) {

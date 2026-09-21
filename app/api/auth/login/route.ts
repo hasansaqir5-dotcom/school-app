@@ -6,16 +6,26 @@ import { signToken } from '@/lib/auth';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { role, name, password, nationalCode } = body;
+    const { role, nationalCode, password } = body;
 
+    // ═══════════════════════════════════
+    // ورود آموزگار (با کد ملی + رمز)
+    // ═══════════════════════════════════
     if (role === 'teacher') {
-      const teacher = await prisma.user.findFirst({
-        where: { role: 'TEACHER', name },
+      if (!nationalCode || !password) {
+        return NextResponse.json(
+          { error: 'کد ملی و رمز عبور لازم است.' },
+          { status: 400 }
+        );
+      }
+
+      const teacher = await prisma.user.findUnique({
+        where: { nationalCode },
       });
 
-      if (!teacher) {
+      if (!teacher || teacher.role !== 'TEACHER') {
         return NextResponse.json(
-          { error: 'نام کاربری یا رمز عبور درست نیست.' },
+          { error: 'کد ملی یا رمز عبور درست نیست.' },
           { status: 401 }
         );
       }
@@ -23,7 +33,7 @@ export async function POST(req: NextRequest) {
       const ok = await bcrypt.compare(password, teacher.password);
       if (!ok) {
         return NextResponse.json(
-          { error: 'نام کاربری یا رمز عبور درست نیست.' },
+          { error: 'کد ملی یا رمز عبور درست نیست.' },
           { status: 401 }
         );
       }
@@ -36,24 +46,37 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         token,
-        user: { id: teacher.id, name: teacher.name, role: 'teacher' },
+        user: {
+          id: teacher.id,
+          name: teacher.name,
+          nationalCode: teacher.nationalCode,
+          role: 'teacher',
+        },
       });
     }
 
+    // ═══════════════════════════════════
+    // ورود والد (با کد ملی دانش‌آموز)
+    // ═══════════════════════════════════
     if (role === 'parent') {
-      const student = await prisma.student.findFirst({
-        where: {
-          OR: [
-            { nationalCode },
-            { firstName: name },
-          ],
-        },
+      if (!nationalCode) {
+        return NextResponse.json(
+          { error: 'کد ملی دانش‌آموز لازم است.' },
+          { status: 400 }
+        );
+      }
+
+      const student = await prisma.student.findUnique({
+        where: { nationalCode },
         include: { class: true },
       });
 
       if (!student) {
         return NextResponse.json(
-          { error: 'اطلاعات شما توسط آموزگار ثبت نشده است. با آموزگار تماس بگیرید.' },
+          {
+            error:
+              'اطلاعات شما توسط آموزگار ثبت نشده است. با آموزگار تماس بگیرید.',
+          },
           { status: 404 }
         );
       }
@@ -74,9 +97,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ error: 'نقش نامعتبر' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'نقش نامعتبر' },
+      { status: 400 }
+    );
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: 'خطای سرور' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'خطای سرور' },
+      { status: 500 }
+    );
   }
 }

@@ -1,13 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getTokenFromRequest } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
   try {
+    const payload = getTokenFromRequest(req);
+    if (!payload) {
+      return NextResponse.json(
+        { error: 'دسترسی غیرمجاز' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const studentId = searchParams.get('studentId');
 
     if (!studentId) {
-      return NextResponse.json({ error: 'شناسه دانش‌آموز لازم است.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'شناسه دانش‌آموز لازم است.' },
+        { status: 400 }
+      );
+    }
+
+    // آموزگار: چک کنه دانش‌آموز به کلاس‌های خودش تعلق داره
+    // والد: چک کنه دانش‌آموز خودش باشه
+    if (payload.role === 'teacher') {
+      const student = await prisma.student.findFirst({
+        where: {
+          id: studentId,
+          class: {
+            teacherId: payload.userId,
+          },
+        },
+      });
+      if (!student) {
+        return NextResponse.json(
+          { error: 'دسترسی غیرمجاز' },
+          { status: 401 }
+        );
+      }
+    } else if (payload.role === 'parent') {
+      if (studentId !== payload.userId) {
+        return NextResponse.json(
+          { error: 'دسترسی غیرمجاز' },
+          { status: 401 }
+        );
+      }
     }
 
     const student = await prisma.student.findUnique({
@@ -20,15 +58,30 @@ export async function GET(req: NextRequest) {
     });
 
     if (!student) {
-      return NextResponse.json({ error: 'دانش‌آموز پیدا نشد.' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'دانش‌آموز پیدا نشد.' },
+        { status: 404 }
+      );
     }
 
-    const monthOrder = ['مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند', 'فروردین', 'اردیبهشت'];
+    const monthOrder = [
+      'مهر',
+      'آبان',
+      'آذر',
+      'دی',
+      'بهمن',
+      'اسفند',
+      'فروردین',
+      'اردیبهشت',
+    ];
 
     const monthlyAverages = monthOrder.map((month) => {
       const evals = student.evaluations.filter((e) => e.month === month);
       if (!evals.length) return { month, average: 0 };
-      const sum = evals.reduce((s, e) => s + e.activityScore + e.examScore, 0);
+      const sum = evals.reduce(
+        (s, e) => s + e.activityScore + e.examScore,
+        0
+      );
       return { month, average: sum / (evals.length * 2) };
     });
 
