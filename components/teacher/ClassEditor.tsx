@@ -36,16 +36,50 @@ export default function ClassEditor({
   }
 
   return (
-    <Box title="Ø§Ø·Ù„Ø§Ø¹Ø§Øª ÙƒÙ„Ø§Ø³">
+    <Box title="Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ù„Ø§Ø³">
       <form onSubmit={submit} className="mt-5 grid gap-4 sm:grid-cols-2">
         <Input
           label="Ù†Ø§Ù… Ø¢Ù…ÙˆØ²Ú¯Ø§Ø±"
           value={draft.teacherName}
           set={(v) => setDraft({ ...draft, teacherName: v })}
           test="teacher-name"
-          placeholder={`Ð´Ø§Ù„Ø¯: ${teacherUsername}BˆÏ‚ˆ[œ]ˆX™[H¶o¶)öã6aÈ‚ˆ˜[YO^Ù˜Y™Ü˜Y_BˆÙ]^ÊŠHOˆÙ]˜Y
-È‹‹™˜YÜ˜YNˆˆJ_Bˆ\ÝH˜Û\ÜËYÜ˜YH‚ˆXÙZÛ\H¶av*ö)öaˆ6¡¶aö)ö,vaH‚ˆÏ‚ˆ[œ]ˆX™[H¶a¶)öaH6ªva6)ö,È‚ˆ˜[YO^Ù˜Y›˜[Y_BˆÙ]^ÊŠHOˆÙ]˜Y
-È‹‹™˜Y˜[YNˆˆJ_Bˆ\ÝH˜Û\ÜË[˜[YH‚ˆXÙZÛ\H¶av*ö)öaˆ6`öa6)ö,È6àKÌˆ‚ˆÏ‚ˆ[œ]ˆX™[H¶)öã6a¶)öaH6)ö+ö,vb6,ö*‚ˆ˜[YO^Ù˜YœØÚÛÛ˜[Y_BˆÙ]^ÊŠHOˆÙ]˜Y
-È‹‹™˜YØÚÛÛ˜[YNˆˆJ_Bˆ\ÝHœØÚÛÛ[˜[YH‚ˆXÙZÛ\H¶a¶)öaH6a6+ö,v,öaÈ‚ˆÏ‚ˆ[œ]ˆX™[H¶,ö)öa6*¶+v-vb¶a6ã‚ˆ˜[YO^Ù˜Y˜XØY[ZXÖYX\ŸBˆÙ]^ÊŠHOˆÙ]˜Y
-È‹‹™˜YXØY[ZXÖYX\ŽˆˆJ_Bˆ\ÝH˜XØY[ZXË^YX\ˆ‚ˆXÙZÛ\H¶,v)ö+öaö)öa6*¶+v-vã6a6ã‚ˆÏ‚ˆ]Û‚ˆ]K]\ÝYHœØ]™KXÛ\ÜÈ‚ˆÛ\ÜÓ˜[YOH›Z[‹ZLLˆ›Ý[™Y^™ËXÞX[‹MÌ›ÛX›Û^]Ú]HÛN˜ÛÛ\Ü[‹Lˆ‚ˆ‚ˆ6,6+¶ã6,vaÈ6)ö-öa6)ö.v)ö*ˆ6`ö¶a6)ö,ÂˆØ]Û‚ˆÙ›Ü›O‚ˆÐ›Þ‚ˆ
-NÂŸB
+          placeholder={`Ù…Ø«Ø§Ù„: ${teacherUsername}`}
+        />
+        <Input
+          label="Ù¾Ø§ÛŒÙ‡"
+          value={draft.grade}
+          set={(v) => setDraft({ ...draft, grade: v })}
+          test="class-grade"
+          placeholder="Ù…Ø«Ø§Ù„: Ú†Ù‡Ø§Ø±Ù…"
+        />
+        <Input
+          label="Ù†Ø§Ù… Ú©Ù„Ø§Ø³"
+          value={draft.name}
+          set={(v) => setDraft({ ...draft, name: v })}
+          test="class-name"
+          placeholder="Ù…Ø«Ø§Ù„: Ú©Ù„Ø§Ø³ Û±/Û²"
+        />
+        <Input
+          label="Ù†Ø§Ù… Ù…Ø¯Ø±Ø³Ù‡"
+          value={draft.schoolName}
+          set={(v) => setDraft({ ...draft, schoolName: v })}
+          test="school-name"
+          placeholder="Ù†Ø§Ù… Ù…Ø¯Ø±Ø³Ù‡"
+        />
+        <Input
+          label="Ø³Ø§Ù„ ØªØ­ØµÛŒÙ„ÛŒ"
+          value={draft.academicYear}
+          set={(v) => setDraft({ ...draft, academicYear: v })}
+          test="academic-year"
+          placeholder="Û±Û´Û°Û´â€“Û±Û´Û°Ûµ"
+        />
+        <button
+          data-testid="save-class"
+          className="min-h-12 rounded-xl bg-cyan-700 font-bold text-white sm:col-span-2"
+        >
+          Ø°Ø®ÛŒØ±Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ù„Ø§Ø³
+        </button>
+      </form>
+    </Box>
+  );
+}
