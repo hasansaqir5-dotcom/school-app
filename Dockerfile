@@ -17,11 +17,11 @@ COPY . .
 # Build
 RUN npm run build
 
-# تنظیمات محیطی برای گوش دادن روی همه interface‌ها
+# تنظیمات محیطی
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
-ENV PORT=3000
+ENV PORT=80
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD ["npm", "start"]
