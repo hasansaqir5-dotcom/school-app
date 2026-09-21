@@ -5,20 +5,18 @@ WORKDIR /app
 # کپی فایل‌های پکیج
 COPY package.json ./
 
-# نصب پکیج‌ها
+# کپی Prisma Schema (قبل از npm install)
+COPY prisma ./prisma
+
+# نصب پکیج‌ها (prisma generate توی postinstall اجرا می‌شه)
 RUN npm install --legacy-peer-deps
 
 # کپی همه فایل‌ها
 COPY . .
 
-# ساخت Prisma Client
-RUN npx prisma generate
-
 # Build پروژه
 RUN npm run build
 
-# پورت
 EXPOSE 3000
 
-# اجرا
 CMD ["npm", "start"]
