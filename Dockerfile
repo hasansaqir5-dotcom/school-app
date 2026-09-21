@@ -1,20 +1,20 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
 
 # کپی فایل‌های پکیج
 COPY package.json ./
 
-# کپی Prisma Schema (قبل از npm install)
+# کپی Prisma Schema
 COPY prisma ./prisma
 
-# نصب پکیج‌ها (prisma generate توی postinstall اجرا می‌شه)
+# نصب پکیج‌ها
 RUN npm install --legacy-peer-deps
 
 # کپی همه فایل‌ها
 COPY . .
 
-# Build پروژه
+# Build
 RUN npm run build
 
 EXPOSE 3000
